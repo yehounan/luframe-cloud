@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.quanlehui.adminservice.mapper.AdminUserMapper">
+  <resultMap id="BaseResultMap" type="com.quanlehui.allserviceapi.admin.domain.AdminUser">
+      <id column="id" jdbcType="BIGINT" property="id" />
+      <result column="username" jdbcType="VARCHAR" property="username" />
+      <result column="password" jdbcType="VARCHAR" property="password" />
+      <result column="state" jdbcType="TINYINT" property="state" />
+      <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+      <result column="dept_id" jdbcType="BIGINT" property="deptId" />
+      <result column="see_member_all" jdbcType="TINYINT" property="seeMemberAll" />
+
+  </resultMap>
+
+  <select id="selectByUsername" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select id, username, password, state, create_time, see_member_all
+    from admin_user
+    where username = #{username,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByIdAndUsername" resultMap="BaseResultMap">
+    select id, username, password, state, create_time, see_member_all
+    from admin_user
+    where id = #{id,jdbcType=BIGINT} and username = #{username,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectUserList" resultType="com.quanlehui.allserviceapi.admin.dto.AdminUserDTO">
+
+ SELECT a.id id,
+           a.username username,
+           a.password PASSWORD,
+           a.state state,
+           a.create_time createTime,
+           a.realname realname,
+           a.phone phone,
+           a.email email,
+           a.see_member_all seeMemberAll,
+            b.dept_name  deptName,
+            b.id deptId
+
+           FROM admin_user a , admin_department b  WHERE a.dept_id=b.id
+  </select>
+
+
+   <!--根据用户id获取用户信息-->
+    <select id="getAdminUser"   resultType="com.quanlehui.allserviceapi.admin.dto.AdminUserDTO">
+
+        SELECT a.id id,
+        a.username username,
+        a.create_time createTime,
+        a.realname realname,
+        a.phone phone,
+        a.email email,
+        a.see_member_all seeMemberAll,
+        b.dept_name  deptName,
+        b.id deptId
+        FROM admin_user a , admin_department b  WHERE a.dept_id=b.id
+        AND     a.id=#{userId}
+    </select>
+
+
+</mapper>

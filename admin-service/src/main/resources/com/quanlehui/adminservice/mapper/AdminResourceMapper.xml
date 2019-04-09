@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.quanlehui.adminservice.mapper.AdminResourceMapper">
+  <resultMap id="BaseResultMap" type="com.quanlehui.allserviceapi.admin.domain.AdminResource">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="resource_url" jdbcType="VARCHAR" property="resourceUrl" />
+    <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="jump_url" jdbcType="VARCHAR" property="jumpUrl" />
+  </resultMap>
+<!--  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from admin_resource
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.huanya.data.admin.service.api.domain.AdminResource">
+    insert into admin_resource (id, name, resource_url, 
+      type, parent_id, sort, 
+      create_time)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{resourceUrl,jdbcType=VARCHAR}, 
+      #{type,jdbcType=TINYINT}, #{parentId,jdbcType=BIGINT}, #{sort,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.huanya.data.admin.service.api.domain.AdminResource">
+    update admin_resource
+    set name = #{name,jdbcType=VARCHAR},
+      resource_url = #{resourceUrl,jdbcType=VARCHAR},
+      type = #{type,jdbcType=TINYINT},
+      parent_id = #{parentId,jdbcType=BIGINT},
+      sort = #{sort,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select id, name, resource_url, type, parent_id, sort, create_time
+    from admin_resource
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, name, resource_url, type, parent_id, sort, create_time
+    from admin_resource
+    order by id asc
+  </select>-->
+  <select id="selectByResourceUrl" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select id, name, resource_url, type, parent_id, sort, create_time, jump_url
+    from admin_resource
+    where resource_url = #{resourceUrl,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectMenuByParentId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select id, name, resource_url, type, parent_id, sort, create_time, jump_url
+    from admin_resource
+    where parent_id = #{parentId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectAllOrderBySort" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select id, name, resource_url, type, parent_id, sort, create_time, jump_url
+    from admin_resource
+    ORDER BY sort ASC
+  </select>
+
+</mapper>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.quanlehui.adminservice.mapper.AdminUserOperateLogMapper">
+
+    <resultMap id="adminUserOperateLogListResultMap"
+               type="com.quanlehui.allserviceapi.admin.dto.AdminUserOperateLogDTO">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="user_id" property="userId" jdbcType="BIGINT"/>
+        <result column="login_ip" property="loginIp" jdbcType="VARCHAR"/>
+        <result column="request_uri" property="requestUri" jdbcType="VARCHAR"/>
+        <result column="request_method" property="requestMethod" jdbcType="VARCHAR"/>
+        <result column="class_name" property="className" jdbcType="VARCHAR"/>
+        <result column="method_name" property="methodName" jdbcType="VARCHAR"/>
+        <result column="params" property="params" jdbcType="VARCHAR"/>
+        <result column="result" property="result" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="getAdminUserOperateLogList" resultMap="adminUserOperateLogListResultMap"
+            parameterType="com.quanlehui.allserviceapi.admin.param.AdminOperateLogQueryParam">
+        SELECT
+        a.id,
+        a.create_time,
+        b.username,
+        a.user_id,
+        a.login_ip,
+        a.request_uri,
+        a.request_method,
+        a.class_name,
+        a.method_name,
+        a.params,
+        a.result
+        FROM
+        admin_user_operate_log a LEFT JOIN admin_user b ON a.user_id = b.id WHERE 1=1
+        <if test="userId != null ">
+            AND a.user_id = #{userId,jdbcType=BIGINT}
+        </if>
+        <if test="username != null and username != '' ">
+            <bind name="username" value="'%'+username+'%'"/>
+            AND b.username like #{username}
+        </if>
+        <if test="ip != null and ip != '' ">
+            AND a.login_ip = #{ip,jdbcType=VARCHAR}
+        </if>
+        <if test="startPoint != null">
+            AND a.create_time &gt;= #{startPoint,jdbcType=TIMESTAMP}
+        </if>
+        <if test="endPoint != null">
+            AND a.create_time &lt;= #{endPoint,jdbcType=TIMESTAMP}
+        </if>
+        ORDER BY a.create_time DESC
+    </select>
+
+</mapper>
